@@ -23,6 +23,7 @@ export default function LoggedIn( {image} : User) {
           height={64}
           src={image}
           alt=""
+          priority
         />
       </Link>
     </li>

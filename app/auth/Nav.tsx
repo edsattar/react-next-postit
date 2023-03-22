@@ -4,7 +4,7 @@ import LoggedIn from "./LoggedIn";
 import { authOptions } from "../../pages/api/auth/[...nextauth]";
 import { getServerSession } from "next-auth/next";
 
-export default async function Nav() {
+async function Nav() {
   const session = await getServerSession(authOptions);
 
   // Get the user's session based on the request
@@ -20,3 +20,5 @@ export default async function Nav() {
     </nav>
   );
 }
+
+export default Nav;
