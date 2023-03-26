@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 export default function CreatePost() {
   const [title, setTitle] = useState("");
   const queryClient = useQueryClient();
+
   const { mutate } = useMutation(
     async (title: string) => await axios.post("/api/posts/addPost", { title }),
     {
@@ -22,6 +23,7 @@ export default function CreatePost() {
         toast.dismiss();
         toast.success("Post created successfully");
         queryClient.invalidateQueries(["allPosts"]);
+        queryClient.invalidateQueries(["userPosts"]);
         setTitle("");
       },
     }

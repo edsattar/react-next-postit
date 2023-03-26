@@ -13,9 +13,13 @@ export default async function handler(
     const session = await getServerSession(req, res, authOptions);
     //Fetch all Post
     // Check if user is logged in
-    if (session?.user?.email) {
+    if (!session?.user?.email) {
+      return res.status(403).json({ message: "Not Authenticated" });
+    }
+    else {
       const active_user = await prisma.user.findUnique({
         where: { email: session.user.email },
+        
       });
       if (!active_user) {
         return res.status(403).json({ message: "User not in DB" });
@@ -36,8 +40,10 @@ export default async function handler(
 
           // place result in res state
           res.status(200).json(result);
+          await prisma.$disconnect();
         } catch (err) {
           res.status(403).json({ err: "Error Fetching" });
+          await prisma.$disconnect();
         }
       }
     }

@@ -1,11 +1,9 @@
-"use client"
-
-type ToggleProps = {
+type Props = {
   deletePost: () => void
   setToggle: (toggle: boolean) => void
 }
 
-export default function Toggle({ deletePost, setToggle }: ToggleProps) {
+export default function DeleteConfirm({ deletePost, setToggle }: Props) {
   return (
     <div
       onClick={(e) => {

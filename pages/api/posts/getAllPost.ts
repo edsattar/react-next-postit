@@ -21,9 +21,11 @@ export default async function handler(
 
       // place result in res state
       res.status(200).json(result);
+      await prisma.$disconnect();
       
     } catch (err) {
       res.status(403).json({ err: "Error Fetching" });
+      await prisma.$disconnect();
     }
   }
 }

@@ -50,11 +50,14 @@ export default async function handler(
               },
             });
             res.status(200).json(result);
+            await prisma.$disconnect();
           } catch (err) {
             res.status(403).json({ err: "Error" });
+            await prisma.$disconnect();
           }
         }
       }
     }
   }
 }
+

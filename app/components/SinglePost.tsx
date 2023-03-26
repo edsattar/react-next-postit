@@ -1,27 +1,32 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { PostType, UserType } from "../utils/types";
-import Toggle from "../dashboard/Toggle";
+import { PostType } from "../utils/types";
+import { toast } from "react-hot-toast";
+import DeleteConfirm from "../dashboard/DeleteConfirm";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 
-interface PostsProps {
+interface Props {
   post: PostType;
   allowEdit?: boolean;
 }
 
-export default function Posts({ post, allowEdit }: PostsProps) {
+export default function SinglePost({ post, allowEdit }: Props) {
   const [toggle, setToggle] = useState(false);
   const queryClient = useQueryClient();
+
   const { mutate } = useMutation(
     async (id: string) =>
       await axios.delete("/api/posts/deletePost", { data: id }),
     {
       onSuccess: () => {
+        toast.remove();
+        toast.success("Post Deleted");
         console.log("deleted");
         queryClient.invalidateQueries(["userPosts"]);
+        queryClient.invalidateQueries(["allPosts"]);
       },
       onError: (error) => {
         console.log("ERROR!!!");
@@ -30,13 +35,14 @@ export default function Posts({ post, allowEdit }: PostsProps) {
   );
 
   const deletePost = () => {
+    toast.loading("Deleting Post...");
     mutate(post.id);
-
   };
 
   return (
     <>
       <div className="bg-white my-8 p-8 rounded-lg ">
+        {/* Avatar and Name */}
         <div className="flex items-center gap-2">
           <Image
             className="rounded-full"
@@ -47,9 +53,11 @@ export default function Posts({ post, allowEdit }: PostsProps) {
           />
           <h3 className="font-bold text-gray-700">{post.user.name}</h3>
         </div>
+        {/* Post Title */}
         <div className="my-8 ">
           <p className="break-all">{post.title}</p>
         </div>
+        {/* Comments and Delete */}
         <div className="flex gap-4 cursor-pointer items-center">
           <Link
             href={{
@@ -68,7 +76,7 @@ export default function Posts({ post, allowEdit }: PostsProps) {
           )}
         </div>
       </div>
-      {toggle && <Toggle deletePost={deletePost} setToggle={setToggle} />}
+      {toggle && <DeleteConfirm deletePost={deletePost} setToggle={setToggle} />}
     </>
   );
 }
