@@ -4,27 +4,36 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 import toast from "react-hot-toast";
 
-export default function CreatePost() {
-  const [title, setTitle] = useState("");
+type Props = {
+  postId: string;
+};
+
+type Data = {
+  text: string;
+  postId: string;
+};
+
+export default function CreatePost({ postId }: Props) {
+  const [text, setText] = useState("");
   const queryClient = useQueryClient();
 
   const { mutate } = useMutation(
-    async (title: string) => await axios.post("/api/posts/addPost", { title }),
+    async ({ text, postId }: Data) =>
+      await axios.post("/api/posts/addComment", { text, postId }),
     {
       // on Error toast error message
       onError: (err) => {
         if (err instanceof AxiosError) {
           toast.dismiss();
-          toast.error(err?.response?.data.message);
+          toast.error("ERROR");
         }
       },
       // On success toast success message and clear input
       onSuccess: () => {
+        queryClient.invalidateQueries(["postDetail"]);
         toast.dismiss();
-        toast.success("Post created successfully");
-        queryClient.invalidateQueries(["allPosts"]);
-        queryClient.invalidateQueries(["userPosts"]);
-        setTitle("");
+        toast.success("Comment added");
+        setText("");
       },
     }
   );
@@ -32,38 +41,41 @@ export default function CreatePost() {
   // Form submit handler
   const submitHandler = async (e: React.FormEvent) => {
     e.preventDefault();
-    mutate(title);
-    toast.loading("Creating post...");
+    mutate({ text, postId });
+    toast.loading("Adding your comment");
   };
 
   return (
     <>
       {/* Input Form Card */}
-      <form onSubmit={submitHandler} className="bg-white my-8 p-8 rounded-md">
+      <form onSubmit={submitHandler} className="bg-white mb-8 p-8 rounded-md">
         {/* Text input Area */}
-        <div className="flex flex-col my-4">
-          <textarea
-            onChange={(e) => setTitle(e.target.value)}
+        <div className="flex flex-col mb-4">
+          <input
+            disabled={false}
+            onChange={(e) => setText(e.target.value)}
             name="title"
-            value={title}
-            placeholder="What's on your mind?"
-            className="p-4 text-lg rounded-md my-2 bg-gray-200"></textarea>
+            value={text}
+            type="text"
+            placeholder="Enter your comment here"
+            className="p-4 text-lg rounded-md my-2 bg-gray-200"
+          />
         </div>
         {/* Character counter and Button*/}
         <div className=" flex items-center justify-between gap-2">
           {/* Character counter */}
           <p
             className={`font-bold text-sm ${
-              title.length > 300 ? "text-red-700" : "text-gray-700"
+              text.length > 300 ? "text-red-700" : "text-gray-700"
             }`}>
-            {`${title.length}/300`}
+            {`${text.length}/300`}
           </p>
           {/* Submit button */}
           <button
-            disabled={title.length > 300 || title.trim().length < 1}
+            disabled={text.length > 300 || text.trim().length < 1}
             className="text-sm bg-teal-600 text-white py-2 px-6 rounded-xl disabled:opacity-25"
             type="submit">
-            Create post
+            Add Comment
           </button>
         </div>
       </form>

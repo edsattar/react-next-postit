@@ -15,7 +15,7 @@ export type PostType = {
     text: string;
     createdAt: string;
     postId: string;
-    userId: string;
+    user: UserType;
   }[];
 }
 

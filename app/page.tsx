@@ -1,4 +1,3 @@
-"use client";
 import CreatePost from "./components/CreatePost";
 import { AllPosts } from "./components/AllPosts";
 

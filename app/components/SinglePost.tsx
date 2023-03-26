@@ -27,6 +27,7 @@ export default function SinglePost({ post, allowEdit }: Props) {
         console.log("deleted");
         queryClient.invalidateQueries(["userPosts"]);
         queryClient.invalidateQueries(["allPosts"]);
+        queryClient.invalidateQueries(["postDetail"]);
       },
       onError: (error) => {
         console.log("ERROR!!!");

@@ -1,14 +1,6 @@
-"use client";
-
-import SinglePost from "@/app/components/SinglePost";
-import { PostType } from "@/app/utils/types";
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
-
-const fetchDetails = async (slug: string) => {
-  const { data } = await axios.get(`/api/posts/${slug}`);
-  return data;
-};
+import PostDetail from "@/app/components/PostDetail";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@api/auth/[...nextauth]";
 
 type URL = {
   params: {
@@ -16,12 +8,12 @@ type URL = {
   };
 };
 
-export default function PostDetail(url: URL) {
-  const { data, isLoading } = useQuery<PostType>(["postDetail"], () =>
-    fetchDetails(url.params.slug)
+export default async function PostSlug(url: URL) {
+  const session = await getServerSession(authOptions);
+  return (
+    <PostDetail
+      slug={url.params.slug}
+      enableComments={session ? true : false}
+    />
   );
-
-  if (isLoading) return <div>Loading...</div>;
-
-  return data ? <SinglePost post={data} /> : <p>Post not found</p>;
 }
