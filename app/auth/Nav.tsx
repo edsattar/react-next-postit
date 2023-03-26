@@ -15,7 +15,7 @@ async function Nav() {
       </Link>
       <ul className="flex items-center gap-6">
         {!session?.user && <Login />}
-        {session?.user && <LoggedIn image={session.user?.image || ""} />}
+        {session?.user && <LoggedIn {...session.user} />}
       </ul>
     </nav>
   );
