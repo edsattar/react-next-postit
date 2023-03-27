@@ -1,0 +1,5 @@
+{
+  "/page": "/",
+  "/dashboard/page": "/dashboard",
+  "/post/[slug]/page": "/post/[slug]"
+}

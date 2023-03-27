@@ -1,0 +1,13 @@
+{
+  "/_app": "pages/_app.js",
+  "/_error": "pages/_error.js",
+  "/api/auth/[...nextauth]": "pages/api/auth/[...nextauth].js",
+  "/api/posts/[details]": "pages/api/posts/[details].js",
+  "/api/posts/addComment": "pages/api/posts/addComment.js",
+  "/api/posts/addPost": "pages/api/posts/addPost.js",
+  "/api/posts/deletePost": "pages/api/posts/deletePost.js",
+  "/api/posts/getAllPost": "pages/api/posts/getAllPost.js",
+  "/api/posts/getUserPosts": "pages/api/posts/getUserPosts.js",
+  "/_document": "pages/_document.js",
+  "/404": "pages/404.html"
+}
