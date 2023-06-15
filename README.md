@@ -1,3 +1,5 @@
+Following https://youtu.be/4xduSsxa5Os
+
 ## **Create your project**
 
 Start by creating a new Next.js project if you don’t have one set up already. The most common approach is to use [Create Next App](https://tailwindcss.com/docs/guides/nextjs#:~:text=Create%20your%20project,Next%20App.).
